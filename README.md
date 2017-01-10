@@ -4,7 +4,7 @@ output: html_document
 ---
 
 ## Background
-Using devices such as Jawbone Up, Nike FuelBand, and Fitbit it is now possible to collect a large amount of data about personal activity relatively inexpensively. These type of devices are part of the quantified self movement – a group of enthusiasts who take measurements about themselves regularly to improve their health, to find patterns in their behavior, or because they are tech geeks. One thing that people regularly do is quantify how much of a particular activity they do, but they rarely quantify how well they do it. In this project, your goal will be to use data from accelerometers on the belt, forearm, arm, and dumbell of 6 participants. They were asked to perform barbell lifts correctly and incorrectly in 5 different ways. More information is available from the website here: http://groupware.les.inf.puc-rio.br/har (see the section on the Weight Lifting Exercise Dataset). 
+Using devices such as Jawbone Up, Nike FuelBand, and Fitbit it is now possible to collect a large amount of data about personal activity relatively inexpensively. These type of devices are part of the quantified self movement – a group of enthusiasts who take measurements about themselves regularly to improve their health, to find patterns in their behavior, or because they are tech geeks. One thing that people regularly do is quantify how much of a particular activity they do, but they rarely quantify how well they do it. In this project, the goal is to use data from accelerometers on the belt, forearm, arm, and dumbell of 6 participants. Participants were asked to perform barbell lifts correctly and incorrectly in 5 different ways. More information is available from the website here: http://groupware.les.inf.puc-rio.br/har (see the section on the Weight Lifting Exercise Dataset). 
 
 ## Data
 
@@ -18,7 +18,7 @@ https://d396qusza40orc.cloudfront.net/predmachlearn/pml-testing.csv
 
 The data for this project come from this source: http://groupware.les.inf.puc-rio.br/har. If you use the document you create for this class for any purpose please cite them as they have been very generous in allowing their data to be used for this kind of assignment. 
 
-## Load libraries
+## Load Libraries
 Firstly, we must load the appropriate libraries for the analysis.
 
 ```r
@@ -49,10 +49,10 @@ training <- training[inTrain, ]
 testing <- training[-inTrain, ]
 ```
 
-## Pre-procession
+## Pre-Procession
 There are about 160 variables in this data set. In order to reduce the dimensions of our model, we should try remove variables that show little variance and variables that have mostly missing values.
 
-Firstly, let's remove variables with that show little variance with the 'nearZeroVar' function.
+Let's remove variables that show little variance with the 'nearZeroVar' function.
 
 ```r
 n.zero.var <- nearZeroVar(training, saveMetrics = TRUE)
@@ -61,7 +61,7 @@ nzv.col.index <- n.zero.var$nzv
 training <- training[, !nzv.col.index] 
 ```
 
-Secondly, let's remove the first 5 columns because they do not provide any information our model can use. 
+Now let's remove the first 5 columns because they do not provide any information our model can use. 
 
 ```r
 training <- training[, -(1:5)]
@@ -74,7 +74,7 @@ col.na <- sapply(training, function(x) {sum(is.na(x))})
 training <- training[, which(col.na < nrow(training)*.85)]
 ```
 
-We have reduced the number of variables to 54. On to model creation... 
+We have reduced the number of variables to 54 from 160.
 
 ## Model Creation and Cross Validation
 I will start with trying to fit a random forest model to the training set. Originally, I tried using the caret package but the algorithm took too long to run. After switching to the randomForest package, the model took less than 1 minute. 
@@ -107,7 +107,7 @@ cm$table
 ##          D    0    0    0  615    0
 ##          E    0    0    0    0  693
 ```
-The results indicate that this model very accurately predicts the correct classe. The 95% confidence interval for accuracy is between 999% and 100%. Later, we will test this model against the test set for the assignment to further validate the accuracy of the model.
+The results indicate that this model very accurately predicts the correct class. The 95% confidence interval for accuracy is about 100%. Later, we will test this model against the test set for the assignment to further validate the accuracy of the model.
 
 ## Out of Sample Error and Expectations
 This model is very accurate at predicting classe for this data set (nearly 100% accurate). I would expect the out of sample error for other similar data sets to be below this accuracy reported in the confusion matrix. I would closely monitor the accuracy on another data set and if accuracy is greately reduced, I would explore methods to reduce overfitting. 
@@ -127,4 +127,3 @@ test.set.answers
 ## Levels: A B C D E
 ```
 
-Thanks for reading :)
